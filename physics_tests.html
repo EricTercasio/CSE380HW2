@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+    physics_test.html
+
+    For testing our wolfie physics system.
+
+    ©2019
+-->
+<html>
+
+<head>
+    <title>Wolfie Game Engine - Physics Test</title>
+    <link rel="shortcut icon" type="image/png" href="./resources/images/favicon.ico" />
+
+    <!-- STANDARDIZE SOME PRESENTATION SETTINGS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jQuery HELPS US WITH THE DOM AND THE WebGL DEBUGGER HELPS US TRACK DOWN ERRORS -->
+    <script src="js/jquery/jquery.min.js"></script>
+
+    <!-- THIS SPRITE IS INCOMPLETE, IT DOESN"T HAVE ANY OF ITS ANIMATION OR IMAGE DATA  -->
+    <!-- WE ARE USING IT TO MAKE SURE CHANGES TO THE BOUNDING VOLUME POSITION ARE       -->
+    <!-- REFLECTED IN THE SPRITE THAT IS TIED TO IT                                     -->
+    <script src="js/test/DummySprite.js"></script>
+
+    <!-- THESE ARE ALL THE THINGS NEEDED FOR OUR PHYSICS SYSTEM-->
+    <script src="js/wolfie/physics/AABB.js"></script>
+    <script src="js/wolfie/physics/CollidableObject.js"></script>
+    <script src="js/wolfie/physics/Collision.js"></script>
+    <script src="js/wolfie/physics/PhysicsComponent.js"></script>
+    <script src="js/wolfie/physics/PhysicalProperties.js"></script>
+
+    <!-- THIS HAS ALL THE TESTS -->
+    <script src="js/test/PhysicsTests.js"></script>
+    <script src="js/wolfie/graphics/TextRenderer.js"></script>
+
+    <!-- THIS IS WHERE OUR EXAMPLE STARTS -->
+    <script>
+        $(document).ready(function () {
+            // THIS WILL DO OUR TEXT RENDERING
+            var physics = new PhysicsComponent();
+            var textRenderer = new TextRenderer("text_canvas", "monospace", "20", "#FFFF00");
+
+            // THIS HAS ALL THE PHYSICS TESTS
+            var testManager = new PhysicsTests(physics, textRenderer);
+
+            var textCanvas = document.getElementById("text_canvas");
+            textCanvas.width = window.innerWidth;
+            textCanvas.height = window.innerHeight;
+            textRenderer.render();
+            textCanvas.addEventListener("mousedown", function(mouseEvent) {
+                // LEFT BUTTON
+                if (mouseEvent.button === 2) {
+                    testManager.runPreviousTest();
+                }
+                // RIGHT BUTTON
+                else if (mouseEvent.button === 0) {
+                    testManager.runNextTest();
+                }
+                textRenderer.render();
+            });
+        });
+    </script>
+
+    <style>
+        #text_canvas {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            background-color: rgb(0, 0, 0);
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="text_canvas"></canvas>
+</body>
+
+</html>

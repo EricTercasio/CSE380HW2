@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--
+    physics_demo.html
+    
+    A simple little game to demonstrate the physics system.
+
+    ©2019
+-->
+<html>
+    <head>
+        <title>Wolfie Game Engine - Physics Demo</title>
+        <link rel="shortcut icon" type="image/png" href="./resources/images/favicon.ico"/>
+
+        <!-- STANDARDIZE SOME PRESENTATION SETTINGS -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- jQuery HELPS US WITH THE DOM AND THE WebGL DEBUGGER HELPS US TRACK DOWN ERRORS -->
+        <script src="js/jquery/jquery.min.js"></script>
+        <script src="js/webgl-debug/webgl-debug.js"></script>
+
+        <!-- HERE ARE THE JavaScript FILES FOR OUR LITTLE Wolfie.js ENGINE -->
+        <!-- NOTE THAT WHEN ONE RELEASES A JavaScript LIBRARY ONE CAN COMBINE -->
+        <!-- ALL OF THESE FILES INTO ONE MINIFIED FILE USING AN AUTOMATED PROCESS -->
+        <!-- BUT DURING DEVELOPMENT DEBUGGING IS EASIER USING FILES LIKE THESE -->
+        <script src="js/wolfie/files/WolfieFileManager.js"></script>
+        <script src="js/wolfie/graphics/GraphicsComponent.js"></script>
+        <script src="js/wolfie/graphics/Shader.js"></script>
+        <script src="js/wolfie/graphics/SpriteRenderer.js"></script>
+        <script src="js/wolfie/graphics/TextRenderer.js"></script>
+        <script src="js/wolfie/graphics/Texture.js"></script>
+        <script src="js/wolfie/math/MathComponent.js"></script>
+        <script src="js/wolfie/physics/AABB.js"></script>
+        <script src="js/wolfie/physics/CollidableObject.js"></script>
+        <script src="js/wolfie/physics/Collision.js"></script>
+        <script src="js/wolfie/physics/PhysicalProperties.js"></script>
+        <script src="js/wolfie/physics/PhysicsComponent.js"></script>
+        <script src="js/wolfie/scene/SceneComponent.js"></script>
+        <script src="js/wolfie/sprite/AnimatedSprite.js"></script>
+        <script src="js/wolfie/sprite/AnimatedSpriteType.js"></script>
+        <script src="js/wolfie/sprite/StaticSprite.js"></script>
+        <script src="js/wolfie/sprite/StaticSpriteType.js"></script>
+        <script src="js/wolfie/ui/UIComponent.js"></script>
+        <script src="js/wolfie/Wolfie.js"></script>
+
+        <!-- AND THIS BUILDS THE EXAMPLE-->
+        <script src="js/test/PhysicsDemoSceneBuilder.js"></script>
+
+        <!-- THIS IS WHERE OUR EXAMPLE STARTS -->
+        <script>
+            $(document).ready(function(){
+
+                // CONSTRUCT AND INITIALIZE OUR AFG OBJECT
+                window.wolfie = new Wolfie();
+                window.wolfie.init("game_canvas", "text_canvas");
+
+                // NOW LET'S MAKE
+                var testSceneBuilder = new PhysicsDemoSceneBuilder(); 
+                testSceneBuilder.buildScene(window.wolfie.graphics, window.wolfie.scene, window.wolfie.physics, function() {
+                    setInterval(function() {
+                        window.wolfie.step();
+                    }, 20);                    
+                });
+            });
+        </script>
+
+<style>
+    #game_canvas {
+        position:absolute;
+        left: 0px;
+        top: 0px;
+        background-color: rgb(0,0,0);
+    }
+    #text_canvas {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        pointer-events: none;
+        z-index: 10;
+    }
+</style>
+</head>
+
+<body>
+    <canvas id="game_canvas" width="2560" height="1280"></canvas>
+    <canvas id="text_canvas" width="2560" height="1280"></canvas>
+</body>
+</html>
