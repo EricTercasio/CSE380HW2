@@ -41,21 +41,27 @@ class PhysicsComponent {
         for(var i = 0; i < this.collidableObjects.length; i++){
             var currentCollidable = this.collidableObjects[i];
             if(sortedCollidables.length == 0){
-                sortedCollidables[0] == currentCollidable;
+                sortedCollidables.push(currentCollidable);
             }else{
                 var lessThanFound = false;
                 for(var k = 0; k < sortedCollidables.length; k++){
                     var currentLeft = currentCollidable.sweptShape.getLeft();
-                    var sortedLeft = currentCollidable.sweptShape.getLeft();
+                    var sortedLeft = sortedCollidables[k].sweptShape.getLeft();
                     if(currentLeft < sortedLeft){
                         lessThanFound = true;
-                        for(var j = k; j < sortedCollidables.length; j++){
-                            //TODO finish sorting
-                        }
+                        sortedCollidables.splice(k,0,currentCollidable);
+                        break;
+
                     }
                 }
+                if(lessThanFound == false){
+                    //Insert into the end
+                    sortedCollidables.push(currentCollidable);
+                }
+
             }
         }
+        this.collidableObjects = sortedCollidables;
     }
 
     /*
@@ -63,6 +69,34 @@ class PhysicsComponent {
      */
     sortCollisions() {
         // YOU MUST DEFINE THIS METHOD
+        var sortedCollisions = new Array();
+        for(var i = 0; i < this.recyclableCollisions.length; i++){
+            var currentCollision = this.recyclableCollisions[i];
+            if(sortedCollisions.length == 0){
+                if(currentCollision.timeOfCollision > 0.0 && currentCollision.timeOfCollision <= 1)
+                sortedCollisions.push(currentCollision);
+            }else{
+                var lessThanFound = false;
+                for(var k = 0; k < sortedCollisions.length; k++){
+                    var currentLeft = currentCollision.sweptShape.getLeft();
+                    var sortedLeft = sortedCollisions[k].sweptShape.getLeft();
+                    if(currentLeft < sortedLeft){
+                        if(currentCollision.timeOfCollision > 0.0 && currentCollision.timeOfCollision <= 1) {
+                            lessThanFound = true;
+                            sortedCollisions.splice(k, 0, currentCollision);
+                            break;
+                        }
+                    }
+                }
+                if(lessThanFound == false){
+                    //Insert into the end
+                    if(currentCollision.timeOfCollision > 0.0 && currentCollision.timeOfCollision <= 1)
+                    sortedCollisions.push(currentCollision);
+                }
+
+            }
+        }
+        this.collisions = sortedCollisions;
     }
 
     /*
@@ -70,6 +104,12 @@ class PhysicsComponent {
      */
     moveAll(time) {
         // YOU MUST DEFINE THIS METHOD
+        for(var i = 0; i < this.collidableObjects.length; i++){
+            this.collidableObjects[i].move(this.currentTime,time);
+        }
+
+        //update current time
+        this.currentTime = time;
     }
 
     /*
@@ -79,6 +119,8 @@ class PhysicsComponent {
      */
     calculateTimeOfCollision(collision) {
         // YOU MUST DEFINE THIS METHOD
+        var collidable1 = collision.collidableObject1;
+        var collidable2 = collision.collidableObject2;
     }
 
     /*

@@ -61,7 +61,7 @@ class CollidableObject {
         //Update
         xUnitsToMove = this.boundingVolume.centerX + xUnitsToMove;
         yUnitsToMove = this.boundingVolume.centerY + yUnitsToMove;
-        moveTo(xUnitsToMove,yUnitsToMove); //This handles both bounding volume and scene object.
+        this.moveTo(xUnitsToMove,yUnitsToMove); //This handles both bounding volume and scene object.
     }
 
     /*

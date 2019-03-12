@@ -148,7 +148,7 @@ class PhysicsTests {
     testTimeOfCollision() {
         // GET AND SETUP THE STUFF TO TEST
         var a = this.makeCollidableObject(0, 0, 100, 200, 10, 0);
-        var b = this.makeCollidableObject(110, 0, 100, 200, -10, 0);
+        var b = this.makeCollidableObject(110, 0, 100, 200, -10, 0);//centerX, centerY, width, height, velocityX, velocityY
         var collision = new Collision();
         collision.collidableObject1 = a;
         collision.collidableObject2 = b;
@@ -169,6 +169,28 @@ class PhysicsTests {
             for (var i = startTextLineNumber; i < startTextLineNumber + 3; i++)
             this.textRenderer.textToRender[i].fontColor = this.FAILURE_COLOR;
         }
+    }
+
+    testCollidableSort(){
+        var a = this.makeCollidableObject(0,0,100,100,1,1);
+        var b = this.makeCollidableObject(10,50,25,200,2,2);
+        a.sweep(0.0);
+        b.sweep(0.0);
+        this.physics.addCollidableObject(a);
+        this.physics.addCollidableObject(b);
+        this.physics.sortCollidableObjects();
+        var resultsTxt = this.textRenderer.textToRender[2];
+        var text = "";
+        for(var i = 0; i < this.physics.collidableObjects.length; i++){
+            text = text.concat("SweptShape : ");
+            var current = this.physics.collidableObjects[i];
+            text = text.concat(current.sweptShape.centerX + " ");
+            text = text.concat(current.sweptShape.centerY + " ");
+
+        }
+        resultsTxt.text = text;
+
+
     }
 
     
