@@ -71,7 +71,14 @@ class CollidableObject {
      */
     sweep(currentTimeInFrame) {
         // YOU MUST DEFINE THIS METHOD
-        var velX = this.physicalProperties.velocityY;
+        var frameTime = 1;
+        frameTime = frameTime - currentTimeInFrame;
+        var velX = this.physicalProperties.velocityX;
         var velY = this.physicalProperties.velocityY;
+        var newCenterX = this.boundingVolume.centerX + (velX / (frameTime * 2));
+        var newCenterY = this.boundingVolume.centerY + (velY / (frameTime * 2));
+        var newWidth = this.boundingVolume.width + (velX * frameTime);
+        var newHeight = this.boundingVolume.height + (velY * frameTime);
+        this.sweptShape.init(newCenterX,newCenterY,newWidth,newHeight);
     }
 }

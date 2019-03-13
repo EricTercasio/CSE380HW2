@@ -37,6 +37,26 @@ class PhysicsComponent {
      */
     sortCollidableObjects() {
         // YOU MUST DEFINE THIS METHOD
+        var sortedCollidables = new Array();
+        for(var i = 0; i < this.collidableObjects.length; i++){
+            var currentCollidable = this.collidableObjects[i];
+            if(sortedCollidables.length == 0){
+                sortedCollidables[0] == currentCollidable;
+            }else{
+                var lessThanFound = false;
+                for(var k = 0; k < sortedCollidables.length; k++){
+                    var currentLeft = currentCollidable.sweptShape.getLeft();
+                    var sortedLeft = currentCollidable.sweptShape.getLeft();
+                    if(currentLeft < sortedLeft){
+                        lessThanFound = true;
+                        for(var j = k; j < sortedCollidables.length; j++){
+                            //TODO finish sorting
+                        }
+                    }
+                }
+            }
+        }
+        }
     }
 
     /*
