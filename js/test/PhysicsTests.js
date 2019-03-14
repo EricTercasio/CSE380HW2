@@ -132,7 +132,7 @@ class PhysicsTests {
 
         // COMPARE THE EXPECTED TO ACTUAL RESULTS AND DISPLAY THEM        
         var expectedSweptShape = new AABB();
-        expectedSweptShape.init(27.5, 40, 115, 230);
+        expectedSweptShape.init(27.5, 40, 115, 230); //Center x, center y, width, height
         var startTextLineNumber = 2;
         this.printSweptShapeForAABB("-Swept Shape for Positive Vx and Vy", aabb, expectedSweptShape, actualSweptShape, pp, startTextLineNumber);
 
