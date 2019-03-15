@@ -10,6 +10,7 @@ class PhysicsComponent {
         this.collidableObjects = new Array();
         this.collisions = new Array();
         this.recyclableCollisions = new Array();
+        this.tempCollisions = new Array();
         for (var i = 0; i < 1000; i++) {
             var recyclableCollision = new Collision();
             this.recyclableCollisions.push(recyclableCollision);
@@ -154,6 +155,9 @@ class PhysicsComponent {
             console.log("..");
         }
 
+        var xAlreadyCollide = false;
+        var yAlreadyCollide = false;
+
         //Calculate X collisions
         if((xB - (widthB/2)) > (xA + (widthA/2))) { //If they are not currently overlapping on the x axis..
             //Will they?
@@ -164,6 +168,7 @@ class PhysicsComponent {
         }else{
             collision.startTimeOfCollisionX = 0; //0 for "already overlapping"
             collision.endTimeOfCollisionX = 0;
+            xAlreadyCollide = true;
 
         }
         if((yB - (heightB/2)) > (yA + (heightA/2))) { //If they are not currently overlapping on the y axis..
@@ -176,17 +181,38 @@ class PhysicsComponent {
 
             collision.startTimeOfCollisionY = 0;
             collision.endTimeOfCollisionY = 0;
+            yAlreadyCollide = true;
 
         }
         //When either startTimeOfX or startTimeOfY > 1, then there is no collision...
         var colStarX = collision.startTimeOfCollisionX;
         var colStarY = collision.startTimeOfCollisionY;
-        if((colStarX > 0) && colStarY > 0){
-            if(colStarX <= 1 && colStarY <= 1){
-                if(colStarX > colStarY){
-                    collision.timeOfCollision = startTimeOfCollisionX;
-                }else {
-                    collision.timeOfCollision = startTimeOfCollisionY;
+        if(0 < colStarX <= 1){
+            if(yAlreadyCollide == true){
+                collision.timeOfCollision = colStarX;
+                return;
+            }else{
+                if(0 < colStarY <= 1){
+                    if(colStarX < colStarY){
+                        collision.timeOfCollision = colStarY;
+                        return;
+                    }else
+                        collision.timeOfCollision = colStarX;
+                    return;
+                }
+            }
+        }else if(0 < colStarY <= 1){
+            if(xAlreadyCollide == true){
+                collision.timeOfCollision = colStarY;
+                return;
+            }else{
+                if(0 < colStarX <= 1){
+                    if(colStarY < colStarX){
+                        collision.timeOfCollision = colStarX;
+                        return;
+                    }else
+                        collision.timeOfCollision = colStarY;
+                    return;
                 }
             }
         }
@@ -264,12 +290,15 @@ class PhysicsComponent {
                         var testCollision = new Collision();
                         testCollision.collidableObject1 = collidable1;
                         testCollision.collidableObject2 = collidable2;
-                        if(this.checkIfCollisionsExists(testCollision) == false) {
+                        if(this.checkIfCollisionsExists(testCollision) == false && this.broadCollisionCheck(testCollision) == true) {//When we havent already checked this collision in the reverse order, and they are going to collide
                             var collision = this.recyclableCollisions[recyclePosition];
                             collision.collidableObject1 = collidable1;
                             collision.collidableObject2 = collidable2;
-                            this.calculateTimeOfCollision(collision);
+                            //There will be a collision...
+                            this.calculateTimeOfCollision(collision); //So calculate the time of collision.
+                            this.tempCollisions.push(collision);
                             recyclePosition++;
+
                         }
                     }
                 }
@@ -323,4 +352,34 @@ class PhysicsComponent {
         }
         return false;
     }
+    //Used for broad check of collisions using 2 objects swept shapes
+    broadCollisionCheck(collision){
+        var collidable1 = collision.collidableObject1;
+        var collidable2 = collision.collidableObject2;
+        if(collidable1 == this.collidableObjects[5] && collidable2 == this.collidableObjects[3]){
+            console.log("...");
+        }
+
+        var swept1 = collidable1.sweptShape;
+        var swept2 = collidable2.sweptShape;
+
+        //Check if the swept shape bounds overlap, if they do on both axis, we have a collision and return true;
+        var left1 = swept1.getLeft();
+        var right1 = swept1.getRight();
+        var top1 = swept1.getTop();
+        var bottom1 = swept1.getBottom();
+        var left2 = swept2.getLeft();
+        var right2 = swept2.getRight();
+        var top2 = swept2.getTop();
+        var bottom2 = swept2.getBottom();
+
+        //Check if they overlap
+        if(left1 < right2 || right1 > left2 || top1 > bottom2 || bottom1 < top2){
+            //Then they overlap
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 }
