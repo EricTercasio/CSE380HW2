@@ -108,6 +108,9 @@ class PhysicsComponent {
     moveAll(time) {
         // YOU MUST DEFINE THIS METHOD
         for(var i = 0; i < this.collidableObjects.length; i++){
+            if(i == 5){
+                console.log("...");
+            }
             this.collidableObjects[i].move(this.currentTime,time);
         }
 
@@ -310,9 +313,11 @@ class PhysicsComponent {
             for(var i = 0; i < this.collisions.length; i++) {
                 this.collisions[i].collidableObject1.physicalProperties.velocityX = 0;
                 this.collisions[i].collidableObject1.physicalProperties.velocityY = 0;
-                this.collisions[i].collidableObject1.sceneObject.state = "DEAD";
+                //this.collisions[i].collidableObject1.sceneObject.state = "DEAD";
+                console.log(this.collidableObjects.indexOf(this.collisions[i].collidableObject1) + " " +this.collidableObjects.indexOf(this.collisions[i].collidableObject2) )
+                this.collidableObjects[5].boundingVolume.centerY = 600;
             }
-            console.clear();
+
             console.log(this.collisions);
         }
 
@@ -374,11 +379,45 @@ class PhysicsComponent {
         var bottom2 = swept2.getBottom();
 
         //Check if they overlap
-        if(left1 < right2 || right1 > left2 || top1 > bottom2 || bottom1 < top2){
-            //Then they overlap
-            return false;
-        }else{
+        if(this.inRange(left1, right1, left2, right2) == true && this.inRange(top1,bottom1,top2,bottom2) == true){
+            //They intersect
             return true;
+        }else{
+            return false;
+        }
+    }
+
+    doRectanglesOverlap(left1 ,right1, left2, right2){
+            // If one rectangle is on left side of other
+            if (l1.x > r2.x || l2.x > r1.x) {
+                return false;
+            }
+
+            // If one rectangle is above other
+            if (l1.y < r2.y || l2.y < r1.y) {
+                return false;
+            }
+
+            return true;
+    }
+
+    inRange(l1,r1,l2,r2){
+        //Point 1 is (l1,r1) point 2 is (l2,r2)
+        if(l1 <= l2 ){
+            //l2 must be less than r1
+            if(l2 <= r1){
+                return true;
+            }else{
+                return false;
+            }
+        }else
+        {
+            //l1 is greater than l2
+            if(l1 < r2){
+                return true;
+            }else{
+                return false;
+            }
         }
     }
 
