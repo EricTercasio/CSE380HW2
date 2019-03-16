@@ -30,6 +30,9 @@ class CollidableObject {
 
     moveTo(x, y) {
         this.boundingVolume.moveTo(x, y);
+        //Convert to top left corner...for some reason..
+        x = x - (this.boundingVolume.width / 2);
+        y = y - (this.boundingVolume.height / 2);
         if (this.sceneObject != null) {
             this.sceneObject.moveBy(x - this.sceneObject.position[0], y - this.sceneObject.position[1]);
         }        
@@ -61,6 +64,7 @@ class CollidableObject {
         //Update
         xUnitsToMove = this.boundingVolume.centerX + xUnitsToMove;
         yUnitsToMove = this.boundingVolume.centerY + yUnitsToMove;
+
         this.moveTo(xUnitsToMove,yUnitsToMove); //This handles both bounding volume and scene object.
     }
 

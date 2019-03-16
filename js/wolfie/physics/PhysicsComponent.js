@@ -109,7 +109,7 @@ class PhysicsComponent {
         // YOU MUST DEFINE THIS METHOD
         for(var i = 0; i < this.collidableObjects.length; i++){
             if(i == 5){
-                console.log("...");
+                console.clear();
             }
             this.collidableObjects[i].move(this.currentTime,time);
         }
@@ -308,14 +308,24 @@ class PhysicsComponent {
             }
         }
 
-        this.sortCollisions(); //5   864  3
+        this.sortCollisions();
         if(this.collisions.length != 0) {
             for(var i = 0; i < this.collisions.length; i++) {
-                this.collisions[i].collidableObject1.physicalProperties.velocityX = 0;
-                this.collisions[i].collidableObject1.physicalProperties.velocityY = 0;
-                //this.collisions[i].collidableObject1.sceneObject.state = "DEAD";
-                console.log(this.collidableObjects.indexOf(this.collisions[i].collidableObject1) + " " +this.collidableObjects.indexOf(this.collisions[i].collidableObject2) )
-                this.collidableObjects[5].boundingVolume.centerY = 600;
+                //Move all affected objects to time of the first collision, updating their positions.
+                var collision = this.collisions[i];
+                var obj1 = collision.collidableObject1;
+                var obj2 = collision.collidableObject2;
+                var timeOfCollision = collision.timeOfCollision;
+                //Get index
+                var index1 = this.collidableObjects.indexOf(obj1);
+                var index2 = this.collidableObjects.indexOf(obj2);
+                obj1 = this.getCollidableObject(index1);
+                obj2 = this.getCollidableObject(index2);
+                obj1.move(this.currentTime,timeOfCollision);
+                obj2.move(this.currentTime,timeOfCollision);
+                obj1.physicalProperties.velocityX = 0;
+                obj1.physicalProperties.velocityY = 0;
+                obj1.walking = true;
             }
 
             console.log(this.collisions);
@@ -385,20 +395,6 @@ class PhysicsComponent {
         }else{
             return false;
         }
-    }
-
-    doRectanglesOverlap(left1 ,right1, left2, right2){
-            // If one rectangle is on left side of other
-            if (l1.x > r2.x || l2.x > r1.x) {
-                return false;
-            }
-
-            // If one rectangle is above other
-            if (l1.y < r2.y || l2.y < r1.y) {
-                return false;
-            }
-
-            return true;
     }
 
     inRange(l1,r1,l2,r2){
