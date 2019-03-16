@@ -30,6 +30,14 @@ class PhysicsComponent {
         return this.collidableObjects[index];
     }
 
+    findCollidableObjectBySceneObject(sceneObject){
+        for(var i = 0; i < this.collidableObjects.length; i++){
+            if(this.collidableObjects[i].sceneObject == sceneObject){
+                return this.collidableObjects[i];
+            }
+        }
+    }
+
     // YOU MUST DEFINE THE METHODS BELOW
 
     /*
@@ -108,9 +116,6 @@ class PhysicsComponent {
     moveAll(time) {
         // YOU MUST DEFINE THIS METHOD
         for(var i = 0; i < this.collidableObjects.length; i++){
-            if(i == 5){
-                console.clear();
-            }
             this.collidableObjects[i].move(this.currentTime,time);
         }
 
@@ -127,9 +132,6 @@ class PhysicsComponent {
         // YOU MUST DEFINE THIS METHOD
         var collidable1 = collision.collidableObject1;
         var collidable2 = collision.collidableObject2;
-        if(collidable1 == this.collidableObjects[5] && collidable2 == this.collidableObjects[3]){
-            console.log("...");
-        }
 
         var xA = collidable1.boundingVolume.centerX;
         var xB = collidable2.boundingVolume.centerX;
@@ -154,9 +156,6 @@ class PhysicsComponent {
         var velYA = collidable1.physicalProperties.velocityY;
         var velYB = collidable2.physicalProperties.velocityY;
 
-        if((xA === 932) && (yA === 772) && (xB === 224) && (yB === 772)){
-            console.log("..");
-        }
 
         var xAlreadyCollide = false;
         var yAlreadyCollide = false;
@@ -328,7 +327,6 @@ class PhysicsComponent {
                 obj1.walking = true;
             }
 
-            console.log(this.collisions);
         }
 
         //Reset recycled collisions
@@ -371,9 +369,6 @@ class PhysicsComponent {
     broadCollisionCheck(collision){
         var collidable1 = collision.collidableObject1;
         var collidable2 = collision.collidableObject2;
-        if(collidable1 == this.collidableObjects[5] && collidable2 == this.collidableObjects[3]){
-            console.log("...");
-        }
 
         var swept1 = collidable1.sweptShape;
         var swept2 = collidable2.sweptShape;
@@ -415,6 +410,10 @@ class PhysicsComponent {
                 return false;
             }
         }
+    }
+
+    jump(){
+
     }
 
 }

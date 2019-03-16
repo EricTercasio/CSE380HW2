@@ -21,7 +21,7 @@ class Wolfie {
         this.graphics.init(gameCanvasId, textCanvasId, this.math);
 
         // SETUP THE UI EVENT HANDLERS
-        this.ui.init(gameCanvasId, this.scene);
+        this.ui.init(gameCanvasId, this.scene, this.physics);
     }
 
     step() {
@@ -34,4 +34,5 @@ class Wolfie {
         // RENDER THE SCENE
         this.graphics.renderScene(this.scene);
     }
+
 }

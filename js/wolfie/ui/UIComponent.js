@@ -3,7 +3,7 @@
 class UIComponent {
     constructor() {}
 
-    init(canvasId, scene) {
+    init(canvasId, scene, physics) {
         var canvas = document.getElementById(canvasId);
         this.spriteToDrag = null;
         this.dragOffsetX = -1;
@@ -40,5 +40,18 @@ class UIComponent {
             this.spriteToDrag = null;
         }
 
+        document.onkeydown = function (event){
+            event = event || window.event
+            var keyPressed = event.which || event.keyCode
+            if (keyPressed == 32){
+                var collidableObj = physics.findCollidableObjectBySceneObject(scene.player);
+                collidableObj.physicalProperties.velocityY = -30;
+                if(collidableObj.isWalking()){
+                    collidableObj.walking = false; // So we regain gravity...
+                }
+                console.log(collidableObj);
+            }
+
+        }
     }
 }
